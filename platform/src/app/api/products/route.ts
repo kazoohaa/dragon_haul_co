@@ -1,12 +1,11 @@
 import { connection, NextResponse } from "next/server";
 import { isSupabaseConfigured, supabaseServiceRequest } from "@/lib/supabase-rest";
 import type { Listing } from "@/lib/catalog";
-import { sampleListings } from "@/lib/catalog";
 
 export async function GET() {
   await connection();
   if (!isSupabaseConfigured()) {
-    return NextResponse.json(sampleListings, { headers: { "x-demo-catalogue": "true" } });
+    return NextResponse.json({ error: "Supabase is not configured." }, { status: 503 });
   }
   try {
     await supabaseServiceRequest<number>("rpc/expire_pending_paynow_orders", { method: "POST", body: "{}" });

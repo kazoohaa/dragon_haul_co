@@ -73,6 +73,12 @@ alter table public.products enable row level security;
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 
+-- The application accesses these tables only from server routes using the
+-- Supabase service-role/secret key. Explicit grants keep that access working
+-- even when the tables were created outside Supabase's default grant setup.
+grant usage on schema public to service_role;
+grant select, insert, update, delete on public.products, public.orders, public.order_items to service_role;
+
 insert into public.products (id, type, category, name, condition, detail, price_sgd, market_price_sgd, set_name, set_code, finish, image_url, stock, reserved, is_active)
 values
   ('linen-shirt', 'personal', 'Clothes', 'Sunday linen shirt', 'Like new', 'Size M · airy cotton-linen', 31, null, null, null, null, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=82', 1, 0, true),

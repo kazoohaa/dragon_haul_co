@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { sampleListings, type Listing } from "@/lib/catalog";
+import Link from "next/link";
+import { type Listing } from "@/lib/catalog";
 
 type Mode = "personal" | "mtg";
 type FulfillmentMethod = "shipping" | "pickup";
@@ -15,32 +16,47 @@ const formatSgd = (amount: number) => new Intl.NumberFormat("en-SG", { style: "c
 const categories = ["Everything", "Clothes", "K-pop", "Accessories", "Sold items"];
 
 export default function Home() {
-  const [listings, setListings] = useState<Listing[]>(sampleListings);
-  const [mode, setMode] = useState<Mode>("personal");
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [mode, setMode] = useState<Mode>(() => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("shop") === "mtg" ? "mtg" : "personal");
   const [category, setCategory] = useState("Everything");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("featured");
   const [setFilter, setSetFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [finishFilter, setFinishFilter] = useState("all");
-  const [cart, setCart] = useState<Record<string, number>>({});
+  const [cart, setCart] = useState<Record<string, number>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const savedCart = window.localStorage.getItem("dragon-haul-cart");
+      return savedCart ? JSON.parse(savedCart) as Record<string, number> : {};
+    } catch {
+      return {};
+    }
+  });
   const [fulfillmentMethod, setFulfillmentMethod] = useState<FulfillmentMethod>("shipping");
-  const [cartOpen, setCartOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(() => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("bag") === "1");
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [createdOrder, setCreatedOrder] = useState<CreatedOrder | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [dataNotice, setDataNotice] = useState("Sample catalogue shown. Connect Supabase to publish your inventory.");
+  const [dataNotice, setDataNotice] = useState("Loading inventory…");
+
+  useEffect(() => {
+    window.localStorage.setItem("dragon-haul-cart", JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     fetch("/api/products", { cache: "no-store" })
       .then(async (response) => {
-        if (!response.ok) throw new Error("Sample catalogue shown. Set up Supabase to load your inventory.");
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error ?? "Could not load inventory.");
+        }
         const records = (await response.json()) as Listing[];
         setListings(records);
-        setDataNotice(response.headers.get("x-demo-catalogue") ? "Demo listings only. Configure Supabase and replace these samples before accepting orders." : "");
+        setDataNotice("");
       })
-      .catch((error: unknown) => setDataNotice(error instanceof Error ? error.message : "Sample catalogue shown."));
+      .catch((error: unknown) => setDataNotice(error instanceof Error ? error.message : "Could not load inventory."));
   }, []);
 
   const visibleListings = useMemo(() => {
@@ -120,8 +136,8 @@ export default function Home() {
       setCreatedOrder(result as CreatedOrder);
       setCart({});
       fetch("/api/products", { cache: "no-store" })
-        .then(async (productResponse) => productResponse.ok ? { records: (await productResponse.json()) as Listing[], demo: productResponse.headers.get("x-demo-catalogue") === "true" } : null)
-        .then((result) => { if (result) { setListings(result.records); setDataNotice(result.demo ? "Demo listings only. Configure Supabase and replace these samples before accepting orders." : ""); } })
+        .then(async (productResponse) => productResponse.ok ? { records: (await productResponse.json()) as Listing[] } : null)
+        .then((result) => { if (result) { setListings(result.records); setDataNotice(""); } })
         .catch(() => undefined);
     } catch (error) {
       setCheckoutError(error instanceof Error ? error.message : "Could not create the order.");
@@ -165,7 +181,7 @@ export default function Home() {
           <a className="hero-cta" href="#catalog">{mode === "personal" ? "Meet the latest finds" : "Browse the card catalogue"}<span aria-hidden="true">↘</span></a>
         </div>
         <div className="hero-image" role="img" aria-label={mode === "personal" ? "A curated secondhand leather bag" : "A Magic card from the singles catalogue"}>
-          {mode === "personal" ? <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85" alt="" /> : <img src={listings.find((item) => item.id === "mtg-sol-ring")?.image_url ?? sampleListings[7].image_url} alt="" />}
+          {mode === "personal" ? <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85" alt="" /> : <img src="https://images.unsplash.com/photo-1560258018-c7db7645254e?auto=format&fit=crop&w=900&q=85" alt="" />}
           <span className="roundel">{mode === "personal" ? <>FOUND<br />FOR YOU<br />✳</> : <>FRESH<br />FROM THE<br />STACK<br />✳</>}</span>
         </div>
       </section>
@@ -193,17 +209,17 @@ export default function Home() {
         {visibleListings.length === 0 ? <div className="empty-state"><strong>No listings found.</strong><span>Try another search or filter.</span></div> : mode === "personal" ? <div className="personal-grid">{visibleListings.map((item) => {
           const sold = !item.is_active || item.stock <= item.reserved;
           return <article className="personal-card" key={item.id}>
-            <div className="personal-photo"><img src={item.image_url} alt={item.name} loading="lazy" /><span className="condition-tag">{sold ? "Sold" : item.condition}</span></div>
-            <div className="personal-card-head"><div><span className="item-category">{item.category}</span><h3>{item.name}</h3></div><span className="item-price">{formatSgd(item.price_sgd)}</span></div>
-            <div className="personal-card-foot"><span>{item.detail}</span>{sold ? <span className="sold-label">Sold</span> : <button type="button" onClick={() => addToCart(item)}>Add to bag +</button>}</div>
+            <Link className="product-link" href={`/products/${item.id}`} aria-label={`View ${item.name}`}><div className="personal-photo"><img src={item.image_url} alt={item.name} loading="lazy" /><span className="condition-tag">{sold ? "Sold" : item.condition}</span></div></Link>
+            <div className="personal-card-head"><div><span className="item-category">{item.category}</span><h3><Link className="product-link" href={`/products/${item.id}`}>{item.name}</Link></h3></div><span className="item-price">{formatSgd(item.price_sgd)}</span></div>
+            <div className="personal-card-foot"><span>{item.detail}</span>{sold ? <span className="sold-label">Sold</span> : <div className="listing-actions"><span className="stock-count">{item.stock - item.reserved} in stock</span><button type="button" onClick={() => addToCart(item)}>Add to bag +</button></div>}</div>
           </article>;
         })}</div> : <div className="singles-list">{visibleListings.map((item) => <article className="single-row" key={item.id}>
-          <img className="single-art" src={item.image_url} alt={item.name} loading="lazy" />
+          <Link className="product-link" href={`/products/${item.id}`} aria-label={`View ${item.name}`}><img className="single-art" src={item.image_url} alt={item.name} loading="lazy" /></Link>
           <div className="single-title"><h3>{item.name}</h3><span>{item.set_name} · {item.set_code}</span></div>
           <div className="single-condition"><span>{item.condition}</span><span>{item.finish === "foil" ? "Foil" : "Non-foil"}</span></div>
           <div className="single-price"><span>Market price</span><strong>{formatSgd(item.market_price_sgd ?? 0)}</strong></div>
           <div className="single-price asking"><span>Your price</span><strong>{formatSgd(item.price_sgd)}</strong></div>
-          <button className="single-add" type="button" onClick={() => addToCart(item)}>Add to bag +</button>
+          <div className="single-actions"><span className="stock-count">{item.stock - item.reserved} in stock</span><button className="single-add" type="button" onClick={() => addToCart(item)}>Add to bag +</button></div>
         </article>)}</div>}
       </section>
 
