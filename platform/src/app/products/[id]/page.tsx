@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { type Listing } from "@/lib/catalog";
 
 const formatSgd = (amount: number) => new Intl.NumberFormat("en-SG", { style: "currency", currency: "SGD" }).format(amount);
 
-export default function ProductPage() {
+function ProductPageContent() {
   const params = useParams<{ id: string }>();
   const [product, setProduct] = useState<Listing | undefined>();
   const [loaded, setLoaded] = useState(false);
@@ -35,6 +35,9 @@ export default function ProductPage() {
 
   const available = Math.max(0, product.stock - product.reserved);
   const sold = !product.is_active || available === 0;
+  const detailImageUrl = product.image_url.includes("api.scryfall.com")
+    ? product.image_url.replace("version=small", "version=large")
+    : product.image_url;
 
   function addToBag() {
     if (sold) return;
@@ -50,11 +53,11 @@ export default function ProductPage() {
     <header className="product-topbar"><Link href="/" className="product-wordmark">dragon haul<span>.</span></Link><nav aria-label="Shop navigation"><Link href="/#catalog">Personal shop</Link><Link href="/?shop=mtg#catalog">MTG singles</Link></nav><Link href="/?bag=1" className="detail-bag">Bag <span>{bagCount}</span></Link></header>
     <Link href="/" className="back-link">← Back to shop</Link>
     <article className="product-detail">
-      <div className="product-detail-image"><img src={product.image_url} alt={product.name} /><span className={`product-status ${sold ? "is-sold" : ""}`}>{sold ? "Sold out" : product.condition}</span></div>
+      <div className="product-detail-image"><img src={detailImageUrl} alt={product.name} /><span className={`product-status ${sold ? "is-sold" : ""}`}>{sold ? "Sold out" : product.condition}</span></div>
       <div className="product-detail-copy">
         <p className="eyebrow">{product.type === "mtg" ? "MTG SINGLE" : product.category}</p>
         <h1>{product.name}</h1>
-        <div className="detail-pricing"><p className="detail-price">{formatSgd(product.price_sgd)}</p>{product.type === "mtg" && product.market_price_sgd !== null && <p className="market-price">Market price {formatSgd(product.market_price_sgd)}</p>}</div>
+        <div className="detail-pricing"><p className="detail-price">{formatSgd(product.price_sgd)}</p></div>
         <dl className="product-facts">
           <div><dt>Condition</dt><dd>{product.condition}</dd></div>
           {product.set_name && <div><dt>Set</dt><dd>{product.set_name}{product.set_code ? ` · ${product.set_code}` : ""}</dd></div>}
@@ -66,4 +69,8 @@ export default function ProductPage() {
       </div>
     </article>
   </main>;
+}
+
+export default function ProductPage() {
+  return <Suspense fallback={<main className="product-page"><p>Loading product…</p></main>}><ProductPageContent /></Suspense>;
 }

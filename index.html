@@ -419,7 +419,7 @@
     function updateSortOptions() {
       const options = state.mode === "personal"
         ? [["featured", "Featured"], ["price-low", "Price: low to high"], ["price-high", "Price: high to low"], ["name", "Name: A to Z"]]
-        : [["featured", "Featured"], ["market-low", "Market: low to high"], ["market-high", "Market: high to low"], ["price-low", "Your price: low to high"], ["price-high", "Your price: high to low"], ["name", "Name: A to Z"]];
+        : [["featured", "Featured"], ["market-low", "Market: low to high"], ["market-high", "Market: high to low"], ["price-low", "Price: low to high"], ["price-high", "Price: high to low"], ["name", "Name: A to Z"]];
       document.querySelector("#sort-select").innerHTML = options.map(([value, label]) => `<option value="${value}">${label}</option>`).join("");
       document.querySelector("#sort-select").value = state.sort;
     }
@@ -470,7 +470,7 @@
             <div class="card-primary"><h3 class="card-name">${card.name}</h3><div class="card-setline">${card.set} · ${card.setCode}</div></div>
             <div class="card-specs"><span>Condition: <strong>${card.condition}</strong></span><span>${card.foil ? "Foil" : "Non-foil"}</span></div>
             <div class="card-market"><span class="card-price-label">Market price</span><span class="card-market-price">${money(card.marketPrice)}</span></div>
-            <div class="card-ask"><span class="card-price-label">Your price</span><span class="card-asking-price">${money(card.price)}</span></div>
+            <div class="card-ask"><span class="card-price-label">Price</span><span class="card-asking-price">${money(card.price)}</span></div>
             <button class="add-button" type="button" data-add="${card.id}">Add to bag +</button>
           </article>`).join("");
         return;

@@ -75,8 +75,6 @@ export default function Home() {
     }
     if (sort === "price-low") result = [...result].sort((a, b) => a.price_sgd - b.price_sgd);
     if (sort === "price-high") result = [...result].sort((a, b) => b.price_sgd - a.price_sgd);
-    if (sort === "market-low") result = [...result].sort((a, b) => (a.market_price_sgd ?? 0) - (b.market_price_sgd ?? 0));
-    if (sort === "market-high") result = [...result].sort((a, b) => (b.market_price_sgd ?? 0) - (a.market_price_sgd ?? 0));
     if (sort === "name") result = [...result].sort((a, b) => a.name.localeCompare(b.name));
     return result;
   }, [listings, mode, category, query, sort, setFilter, conditionFilter, finishFilter]);
@@ -192,18 +190,16 @@ export default function Home() {
         <div className="catalog-heading">
           <div><p className="eyebrow">{mode === "personal" ? "FRESH FROM THE HAUL" : "SINGLE CARD CATALOGUE"}</p><h2>{mode === "personal" ? "Personal Shop" : "MTG Singles"}</h2><p className="muted-copy">{visibleListings.length} {mode === "mtg" ? "cards" : category === "Sold items" ? "sold listings" : "available finds"}</p></div>
           <label className="sort-field">Sort by<select value={sort} onChange={(event) => setSort(event.target.value)}>
-            <option value="featured">Featured</option><option value="price-low">Your price: low to high</option><option value="price-high">Your price: high to low</option>
-            {mode === "mtg" && <><option value="market-low">Market: low to high</option><option value="market-high">Market: high to low</option></>}
+            <option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option>
             <option value="name">Name: A to Z</option>
           </select></label>
         </div>
 
-        {mode === "personal" ? <div className="category-tabs" aria-label="Filter by category">{categories.map((item) => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div> : <div className="card-filters">
+        {mode === "personal" ? <div className="category-tabs" aria-label="Filter by category">{categories.map((item) => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div> : <><label className="single-search">Search singles<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Card name, set, or condition" /></label><div className="card-filters">
           <label>Set<select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}><option value="all">All sets</option>{sets.map((setName) => <option key={setName} value={setName}>{setName}</option>)}</select></label>
           <label>Condition<select value={conditionFilter} onChange={(event) => setConditionFilter(event.target.value)}><option value="all">Any condition</option>{conditions.map((condition) => <option key={condition}>{condition}</option>)}</select></label>
           <label>Finish<select value={finishFilter} onChange={(event) => setFinishFilter(event.target.value)}><option value="all">Foil & non-foil</option><option value="foil">Foil</option><option value="nonfoil">Non-foil</option></select></label>
-          <p className="price-note">Example market prices until you connect a live pricing source.</p>
-        </div>}
+        </div></>}
 
         {dataNotice && <p className="setup-notice">{dataNotice}</p>}
         {visibleListings.length === 0 ? <div className="empty-state"><strong>No listings found.</strong><span>Try another search or filter.</span></div> : mode === "personal" ? <div className="personal-grid">{visibleListings.map((item) => {
@@ -217,8 +213,7 @@ export default function Home() {
           <Link className="product-link" href={`/products/${item.id}`} aria-label={`View ${item.name}`}><img className="single-art" src={item.image_url} alt={item.name} loading="lazy" /></Link>
           <div className="single-title"><h3>{item.name}</h3><span>{item.set_name} · {item.set_code}</span></div>
           <div className="single-condition"><span>{item.condition}</span><span>{item.finish === "foil" ? "Foil" : "Non-foil"}</span></div>
-          <div className="single-price"><span>Market price</span><strong>{formatSgd(item.market_price_sgd ?? 0)}</strong></div>
-          <div className="single-price asking"><span>Your price</span><strong>{formatSgd(item.price_sgd)}</strong></div>
+          <div className="single-price asking"><span>Price</span><strong>{formatSgd(item.price_sgd)}</strong></div>
           <div className="single-actions"><span className="stock-count">{item.stock - item.reserved} in stock</span><button className="single-add" type="button" onClick={() => addToCart(item)}>Add to bag +</button></div>
         </article>)}</div>}
       </section>

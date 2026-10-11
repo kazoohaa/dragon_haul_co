@@ -68,6 +68,9 @@ a { color: inherit; }
 .category-tabs button:hover { border-color: var(--green); }
 .card-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px 12px; margin: 3px 0 20px; }
 .card-filters label { display: grid; gap: 5px; color: var(--muted); font: 9px var(--mono); text-transform: uppercase; }
+.single-search { display: grid; gap: 5px; width: 100%; margin: 3px 0 14px; color: var(--muted); font: 11px var(--mono); text-transform: uppercase; }
+.single-search input { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); background: var(--white); color: var(--ink); font: 15px var(--sans); text-transform: none; }
+.single-search input:focus { outline: 2px solid var(--green-light); border-color: var(--green); }
 .price-note { grid-column: 1 / -1; margin: 0; color: var(--muted); font: 9px var(--mono); }
 .setup-notice { margin: 0 0 16px; padding: 11px 13px; border-left: 3px solid var(--yellow); background: #fbf3d7; color: #574b25; font-size: 11px; }
 .personal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 27px 15px; }
@@ -87,7 +90,7 @@ a { color: inherit; }
 .personal-card-foot button:hover { color: var(--orange); }
 .sold-label { color: var(--muted); font: 9px var(--mono); }
 .singles-list { border-top: 1px solid var(--line); }
-.single-row { display: grid; grid-template-columns: 58px minmax(150px, 1fr) 145px 100px 100px 110px; align-items: center; gap: 15px; min-height: 106px; padding: 12px 10px; border-bottom: 1px solid var(--line); }
+.single-row { display: grid; grid-template-columns: 58px minmax(150px, 1fr) 145px 100px 110px; align-items: center; gap: 15px; min-height: 106px; padding: 12px 10px; border-bottom: 1px solid var(--line); }
 .single-art { width: 58px; height: 80px; border-radius: 2px; background: #e5e1d7; object-fit: cover; }
 .single-row > .product-link { display: block; width: 58px; height: 80px; }
 .single-title h3 { margin: 0 0 4px; font-size: 13px; }
@@ -277,7 +280,7 @@ a { color: inherit; }
   .quick-nav { display: none; }
   .top-actions { justify-self: end; }
   .personal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .single-row { grid-template-columns: 54px minmax(125px, 1fr) 100px 95px; gap: 10px; }
+  .single-row { grid-template-columns: 54px minmax(125px, 1fr) 100px 110px; gap: 10px; }
   .single-art { width: 54px; height: 74px; }
   .single-row > .product-link { width: 54px; height: 74px; }
   .single-condition { grid-column: 2; grid-row: 2; display: flex; gap: 10px; }
@@ -369,3 +372,18 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Accessibility-sized type: these rules intentionally sit after the responsive
+   styles so labels remain legible on phones as well as larger screens. */
+.announcement, .eyebrow, .trust-strip, .sort-field, .card-filters label, .price-note { font-size: 13px; }
+.quick-nav button, .quick-nav a, .search-box input, .bag-button, .mode-tabs span, .hero-cta, .muted-copy, .category-tabs button, .sort-field select, .card-filters select, .setup-notice { font-size: 15px; }
+.condition-tag, .item-category, .personal-card-foot > span:first-child, .personal-card-foot button, .sold-label, .single-title span, .single-condition, .single-price span, .stock-count { font-size: 13px; }
+.personal-card h3, .single-title h3 { font-size: 18px; }
+.item-price, .single-price strong { font-size: 15px; }
+.single-add { min-height: 43px; font-size: 14px; }
+.site-footer { font-size: 13px; }
+.product-topbar nav a, .detail-bag, .back-link, .product-status, .market-price, .product-facts dt, .detail-cta, .continue-shopping { font-size: 14px; }
+.product-facts dd { font-size: 16px; }
+.product-description { font-size: 17px; }
+.bag-info, .bag-summary > div, .form-intro, .delivery-form input, .paynow-confirmation { font-size: 15px; }
+.bag-info > span, .fulfillment-picker > span, .fulfillment-picker p, .fine-print, .pending-chip, .paynow-qr span, .reference-box span, .reference-box strong { font-size: 13px; }
