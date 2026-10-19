@@ -378,7 +378,7 @@ a { color: inherit; }
 .announcement, .eyebrow, .trust-strip, .sort-field, .card-filters label, .price-note { font-size: 13px; }
 .quick-nav button, .quick-nav a, .search-box input, .bag-button, .mode-tabs span, .hero-cta, .muted-copy, .category-tabs button, .sort-field select, .card-filters select, .setup-notice { font-size: 15px; }
 .condition-tag, .item-category, .personal-card-foot > span:first-child, .personal-card-foot button, .sold-label, .single-title span, .single-condition, .single-price span, .stock-count { font-size: 13px; }
-.personal-card h3, .single-title h3 { font-size: 18px; }
+.personal-card h3, .single-title h3 { display: -webkit-box; overflow: hidden; font-size: 14px; line-clamp: 2; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .item-price, .single-price strong { font-size: 15px; }
 .single-add { min-height: 43px; font-size: 14px; }
 .site-footer { font-size: 13px; }

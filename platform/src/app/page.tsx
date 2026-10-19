@@ -13,7 +13,6 @@ type CreatedOrder = {
 };
 
 const formatSgd = (amount: number) => new Intl.NumberFormat("en-SG", { style: "currency", currency: "SGD" }).format(amount);
-const categories = ["Everything", "Clothes", "K-pop", "Accessories", "Sold items"];
 
 export default function Home() {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -83,6 +82,7 @@ export default function Home() {
   const cartCount = Object.values(cart).reduce((total, quantity) => total + quantity, 0);
   const subtotal = cartLines.reduce((total, item) => total + item.price_sgd * cart[item.id], 0);
   const shipping = fulfillmentMethod === "pickup" || subtotal === 0 || subtotal >= 75 ? 0 : 4.9;
+  const personalCategories = ["Everything", ...[...new Set(listings.filter((item) => item.type === "personal").map((item) => item.category))].sort((a, b) => a.localeCompare(b)), "Sold items"];
   const sets = [...new Set(listings.filter((item) => item.type === "mtg").map((item) => item.set_name).filter(Boolean))] as string[];
   const conditions = [...new Set(listings.filter((item) => item.type === "mtg").map((item) => item.condition))];
 
@@ -195,7 +195,7 @@ export default function Home() {
           </select></label>
         </div>
 
-        {mode === "personal" ? <div className="category-tabs" aria-label="Filter by category">{categories.map((item) => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div> : <><label className="single-search">Search singles<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Card name, set, or condition" /></label><div className="card-filters">
+        {mode === "personal" ? <div className="category-tabs" aria-label="Filter by category">{personalCategories.map((item) => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div> : <><label className="single-search">Search singles<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Card name, set, or condition" /></label><div className="card-filters">
           <label>Set<select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}><option value="all">All sets</option>{sets.map((setName) => <option key={setName} value={setName}>{setName}</option>)}</select></label>
           <label>Condition<select value={conditionFilter} onChange={(event) => setConditionFilter(event.target.value)}><option value="all">Any condition</option>{conditions.map((condition) => <option key={condition}>{condition}</option>)}</select></label>
           <label>Finish<select value={finishFilter} onChange={(event) => setFinishFilter(event.target.value)}><option value="all">Foil & non-foil</option><option value="foil">Foil</option><option value="nonfoil">Non-foil</option></select></label>
