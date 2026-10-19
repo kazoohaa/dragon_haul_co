@@ -435,3 +435,71 @@ a { color: inherit; }
 .singles-list .single-actions select { border-color: var(--line); border-radius: 2px; }
 .singles-list .single-actions .single-add { background: var(--green); color: white; border-radius: 2px; }
 .singles-list .single-actions .single-add:hover { background: #193c2b; }
+
+/* Personal-shop cards retain the original editorial product-list treatment. */
+.personal-grid { gap: 28px 16px; }
+.condition-tag {
+  top: 10px;
+  left: 10px;
+  padding: 7px 9px;
+  color: var(--ink);
+  background: rgba(255, 254, 250, .94);
+  font: 500 11px/1.1 var(--mono);
+  letter-spacing: .04em;
+}
+.personal-card-head { gap: 8px; padding-top: 12px; }
+.item-category {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font: 500 11px/1.2 var(--mono);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.personal-card h3 {
+  color: var(--ink);
+  font: 500 18px/1.2 var(--sans);
+}
+.item-price {
+  padding-top: 18px;
+  color: var(--ink);
+  font: 500 15px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.personal-card-foot { align-items: center; margin-top: 10px; }
+.personal-card-foot > span:first-child {
+  color: var(--muted);
+  font: 500 12px/1.4 var(--mono);
+}
+.personal-card-foot button {
+  padding: 7px 0 7px 10px;
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+.personal-card-foot .listing-actions { gap: 8px; }
+.personal-card-foot .listing-actions button {
+  min-width: 110px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--green);
+  color: var(--white);
+  font: 700 12px/1 var(--sans);
+  letter-spacing: 0;
+  white-space: nowrap;
+  transition: background .18s ease;
+}
+.personal-card-foot .listing-actions button:hover { color: var(--white); background: #193c2b; }
+.personal-card-foot .listing-actions button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+@media (max-width: 620px) {
+  .personal-card-head { padding-top: 10px; }
+  .personal-card h3 { font-size: 16px; }
+  .item-price { padding-top: 15px; font-size: 13px; }
+  .personal-card-foot > span:first-child, .personal-card-foot button { font-size: 11px; }
+  .personal-card-foot { align-items: center; }
+  .personal-card-foot .listing-actions { gap: 8px; }
+  .personal-card-foot .listing-actions button { min-width: 96px; min-height: 32px; padding: 0 8px; font-size: 11px; }
+}

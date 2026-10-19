@@ -98,3 +98,51 @@ Error: Module not found: Can't resolve './globals.css'
   5 |   title: "dragon haul co. | Good finds, second lives",
 
 https://nextjs.org/docs/messages/module-not-found 
+[browser] Uncaught Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <LoadingBoundary name="/" loading={null}>
+      <HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}>
+        <HTTPAccessFallbackErrorBoundary pathname="/" notFound={{...}} forbidden={undefined} unauthorized={undefined} ...>
+          <RedirectBoundary>
+            <RedirectErrorBoundary router={{...}}>
+              <InnerLayoutRouter url="/" tree={[...]} params={{}} renderTree={{...}} segmentPath={[...]} ...>
+                <SegmentViewNode type="page" pagePath="page.tsx">
+                  <SegmentTrieNode>
+                  <ClientPageRoot Component={function Home} serverProvidedParams={null}>
+                    <Home params={Promise} searchParams={Promise}>
+                      <main className="shop-shell">
+                        <div>
+                        <header className="topbar">
+                          <a>
+                          <nav>
+                          <div className="top-actions">
+                            <label>
+                            <button className="bag-button" type="button" onClick={function onClick}>
+                              <span>
++                               5
+-                               0
+                        ...
+                ...
+              ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at span (<anonymous>)
+    at Home (src/app/page.tsx:171:94)
+  169 |         <div className="top-actions">
+  170 |           <label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={mode === "mtg" ? "Search cards or sets" : "Find your thing"} aria-label...
+> 171 |           <button className="bag-button" type="button" onClick={() => setCartOpen(true)}>Bag <span>{cartCount}</span></button>
+      |                                                                                              ^
+  172 |         </div>
+  173 |       </header>
+  174 |
