@@ -23,6 +23,7 @@ export default function Home() {
   const [setFilter, setSetFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [finishFilter, setFinishFilter] = useState("all");
+  const [rowQuantities, setRowQuantities] = useState<Record<string, number>>({});
   const [cart, setCart] = useState<Record<string, number>>(() => {
     if (typeof window === "undefined") return {};
     try {
@@ -96,9 +97,14 @@ export default function Home() {
     setFinishFilter("all");
   }
 
-  function addToCart(item: Listing) {
-    if (!item.is_active || item.stock - item.reserved < (cart[item.id] ?? 0) + 1) return;
-    setCart((current) => ({ ...current, [item.id]: (current[item.id] ?? 0) + 1 }));
+  function addToCart(item: Listing, quantity = 1) {
+    if (!item.is_active) return;
+    setCart((current) => {
+      const available = item.stock - item.reserved;
+      const inCart = current[item.id] ?? 0;
+      if (available <= inCart) return current;
+      return { ...current, [item.id]: Math.min(inCart + quantity, available) };
+    });
   }
 
   function setQuantity(item: Listing, change: number) {
@@ -207,15 +213,21 @@ export default function Home() {
           return <article className="personal-card" key={item.id}>
             <Link className="product-link" href={`/products/${item.id}`} aria-label={`View ${item.name}`}><div className="personal-photo"><img src={item.image_url} alt={item.name} loading="lazy" /><span className="condition-tag">{sold ? "Sold" : item.condition}</span></div></Link>
             <div className="personal-card-head"><div><span className="item-category">{item.category}</span><h3><Link className="product-link" href={`/products/${item.id}`}>{item.name}</Link></h3></div><span className="item-price">{formatSgd(item.price_sgd)}</span></div>
-            <div className="personal-card-foot"><span>{item.detail}</span>{sold ? <span className="sold-label">Sold</span> : <div className="listing-actions"><span className="stock-count">{item.stock - item.reserved} in stock</span><button type="button" onClick={() => addToCart(item)}>Add to bag +</button></div>}</div>
+            <div className="personal-card-foot"><span>{item.detail}</span>{sold ? <span className="sold-label">Sold</span> : <div className="listing-actions"><span className="stock-count">{item.stock - item.reserved} in stock</span><button type="button" onClick={() => addToCart(item)}>Add to bag</button></div>}</div>
           </article>;
-        })}</div> : <div className="singles-list">{visibleListings.map((item) => <article className="single-row" key={item.id}>
+        })}</div> : <div className="singles-list">{visibleListings.map((item) => {
+          const available = item.stock - item.reserved;
+          const selectedQuantity = Math.min(rowQuantities[item.id] ?? 1, available);
+          return <article className="single-row" key={item.id}>
           <Link className="product-link" href={`/products/${item.id}`} aria-label={`View ${item.name}`}><img className="single-art" src={item.image_url} alt={item.name} loading="lazy" /></Link>
           <div className="single-title"><h3>{item.name}</h3><span>{item.set_name} · {item.set_code}</span></div>
-          <div className="single-condition"><span>{item.condition}</span><span>{item.finish === "foil" ? "Foil" : "Non-foil"}</span></div>
+          <div className="single-edition"><strong>{item.set_name}</strong><span>{item.set_code}</span></div>
+          <div className="single-condition"><span>Condition: <strong>{item.condition}</strong></span><span>Finish: <strong>{item.finish === "foil" ? "Foil" : "Non-foil"}</strong></span></div>
+          <div className="single-stock"><strong>{available} left</strong></div>
           <div className="single-price asking"><span>Price</span><strong>{formatSgd(item.price_sgd)}</strong></div>
-          <div className="single-actions"><span className="stock-count">{item.stock - item.reserved} in stock</span><button className="single-add" type="button" onClick={() => addToCart(item)}>Add to bag +</button></div>
-        </article>)}</div>}
+          <div className="single-actions"><label className="sr-only" htmlFor={`quantity-${item.id}`}>Quantity for {item.name}</label><select id={`quantity-${item.id}`} value={selectedQuantity} onChange={(event) => setRowQuantities((current) => ({ ...current, [item.id]: Number(event.target.value) }))}>{Array.from({ length: Math.min(available, 10) }, (_, index) => index + 1).map((quantity) => <option key={quantity} value={quantity}>{quantity}</option>)}</select><button className="single-add" type="button" onClick={() => addToCart(item, selectedQuantity)}>Add to bag</button></div>
+        </article>;
+        })}</div>}
       </section>
 
       {mode === "personal" && <section className="promise-band"><h2>Good things deserve another go.</h2><p>Every pre-loved piece is checked and described honestly. New finds are chosen with the same care, then packed thoughtfully for their next home.</p></section>}
