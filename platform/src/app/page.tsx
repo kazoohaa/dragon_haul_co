@@ -177,7 +177,7 @@ export default function Home() {
         <button type="button" aria-pressed={mode === "mtg"} onClick={() => changeMode("mtg")}><strong>MTG Singles</strong><span>Magic: The Gathering cards</span></button>
       </div>
 
-      <section className={`hero hero-${mode}`} id="top">
+      {false && <section className={`hero hero-${mode}`} id="top">
         <div className="hero-copy">
           <span className="eyebrow">{mode === "personal" ? "PERSONAL SHOP · GOOD FINDS, SECOND LIVES" : "MTG SINGLES · FIND YOUR NEXT DECK PIECE"}</span>
           <h1>{mode === "personal" ? "The good stuff finds its way around." : "Find the right card for your next deck."}</h1>
@@ -188,7 +188,7 @@ export default function Home() {
           {mode === "personal" ? <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85" alt="" /> : <img src="https://images.unsplash.com/photo-1560258018-c7db7645254e?auto=format&fit=crop&w=900&q=85" alt="" />}
           <span className="roundel">{mode === "personal" ? <>FOUND<br />FOR YOU<br />✳</> : <>FRESH<br />FROM THE<br />STACK<br />✳</>}</span>
         </div>
-      </section>
+      </section>}
 
       <div className="trust-strip"><span>One-offs, always</span><span>Condition checked</span><span>Ships with care</span><span>{mode === "personal" ? "New things, old stories" : "PayNow · SGD"}</span></div>
 

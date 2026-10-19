@@ -276,3 +276,26 @@ Creating turbopack project {
  GET / 200 in 117ms (next.js: 4ms, application-code: 112ms)
  GET /api/products 200 in 1593ms (next.js: 4ms, application-code: 1588ms)
  GET /api/products 200 in 1605ms (next.js: 5ms, application-code: 1600ms)
+✓ Compiled in 244ms
+ GET / 200 in 168ms (next.js: 8ms, application-code: 161ms)
+ GET /api/products 200 in 1533ms (next.js: 7ms, application-code: 1526ms)
+ GET /api/products 200 in 1598ms (next.js: 8ms, application-code: 1590ms)
+✓ Compiled in 277ms
+✓ Compiled in 515ms
+ GET / 200 in 153ms (next.js: 5ms, application-code: 148ms)
+ GET /api/products 200 in 815ms (next.js: 5ms, application-code: 810ms)
+ GET /api/products 200 in 932ms (next.js: 5ms, application-code: 927ms)
+ GET / 200 in 131ms (next.js: 11ms, application-code: 121ms)
+ GET /api/products 200 in 468ms (next.js: 4ms, application-code: 464ms)
+ GET /api/products 200 in 491ms (next.js: 4ms, application-code: 487ms)
+ GET / 200 in 174ms (next.js: 6ms, application-code: 168ms)
+ GET /api/products 200 in 690ms (next.js: 26ms, application-code: 664ms)
+ GET /api/products 200 in 727ms (next.js: 4ms, application-code: 723ms)
+ GET / 200 in 92ms (next.js: 3ms, application-code: 89ms)
+ GET / 200 in 120ms (next.js: 9ms, application-code: 111ms)
+ GET /api/products 200 in 583ms (next.js: 3ms, application-code: 580ms)
+ GET /api/products 200 in 824ms (next.js: 4ms, application-code: 820ms)
+✓ Compiled in 201ms
+✓ Compiled in 278ms
+✓ Compiled in 119ms
+✓ Compiled in 301ms
