@@ -5,6 +5,7 @@ import Link from "next/link";
 import { type Listing } from "@/lib/catalog";
 
 type Mode = "personal" | "mtg";
+type MtgCollection = "sealed" | "singles";
 type FulfillmentMethod = "shipping" | "pickup";
 type CreatedOrder = {
   order: { id: string; order_number: string; payment_reference: string; fulfillment_method: FulfillmentMethod; subtotal_sgd: number; shipping_sgd: number; total_sgd: number; expires_at: string };
@@ -17,6 +18,7 @@ const formatSgd = (amount: number) => new Intl.NumberFormat("en-SG", { style: "c
 export default function Home() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [mode, setMode] = useState<Mode>(() => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("shop") === "mtg" ? "mtg" : "personal");
+  const [mtgCollection, setMtgCollection] = useState<MtgCollection>("singles");
   const [category, setCategory] = useState("Everything");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("featured");
@@ -65,7 +67,7 @@ export default function Home() {
       ? category === "Sold items"
         ? listings.filter((item) => item.type === "personal" && (!item.is_active || item.stock <= item.reserved))
         : available.filter((item) => item.type === "personal" && (category === "Everything" || item.category === category))
-      : available.filter((item) => item.type === "mtg");
+      : available.filter((item) => item.type === "mtg" && (mtgCollection === "singles" ? !item.category.toLowerCase().includes("sealed") : item.category.toLowerCase().includes("sealed")));
     const search = query.trim().toLowerCase();
     let result = source.filter((item) => `${item.name} ${item.category} ${item.condition} ${item.detail} ${item.set_name ?? ""} ${item.set_code ?? ""} ${item.finish ?? ""}`.toLowerCase().includes(search));
     if (mode === "mtg") {
@@ -77,7 +79,7 @@ export default function Home() {
     if (sort === "price-high") result = [...result].sort((a, b) => b.price_sgd - a.price_sgd);
     if (sort === "name") result = [...result].sort((a, b) => a.name.localeCompare(b.name));
     return result;
-  }, [listings, mode, category, query, sort, setFilter, conditionFilter, finishFilter]);
+  }, [listings, mode, mtgCollection, category, query, sort, setFilter, conditionFilter, finishFilter]);
 
   const cartLines = listings.filter((item) => cart[item.id]);
   const cartCount = Object.values(cart).reduce((total, quantity) => total + quantity, 0);
@@ -89,6 +91,7 @@ export default function Home() {
 
   function changeMode(nextMode: Mode) {
     setMode(nextMode);
+    setMtgCollection("singles");
     setCategory("Everything");
     setQuery("");
     setSort("featured");
@@ -162,13 +165,16 @@ export default function Home() {
       <header className="topbar">
         <a className="wordmark" href="#top">dragon haul<span>.</span></a>
         <nav className="quick-nav" aria-label="Shop navigation">
-          <button type="button" onClick={() => changeMode("personal")}>Personal shop</button>
-          <button type="button" onClick={() => changeMode("mtg")}>MTG singles</button>
-          <a href="/admin">Seller sign in</a>
+          <button type="button" onClick={() => { changeMode("personal"); setCategory("Everything"); }}>All</button>
+          <button type="button" onClick={() => { changeMode("personal"); setCategory("Clothes"); }}>Clothes</button>
+          <button type="button" onClick={() => { changeMode("personal"); setCategory("K-pop"); }}>Kpop</button>
+          <button type="button" onClick={() => { changeMode("mtg"); setMtgCollection("sealed"); }}>MTG Sealed</button>
+          <button type="button" onClick={() => { changeMode("mtg"); setMtgCollection("singles"); }}>MTG Singles</button>
         </nav>
         <div className="top-actions">
-          <label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={mode === "mtg" ? "Search cards or sets" : "Find your thing"} aria-label="Search listings" /></label>
-          <button className="bag-button" type="button" onClick={() => setCartOpen(true)}>Bag <span>{cartCount}</span></button>
+          <button className="utility-button" type="button" aria-label="Search listings" onClick={() => document.getElementById(mode === "mtg" ? "single-search-input" : "product-search-input")?.focus()}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg></button>
+          <a className="utility-button" href="/admin" aria-label="Seller sign in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" /><path d="M6.5 20a5.5 5.5 0 0 1 11 0" /></svg></a>
+          <button className="bag-button" type="button" onClick={() => setCartOpen(true)} aria-label={`Open bag, ${cartCount} items`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg><span>{cartCount}</span></button>
         </div>
       </header>
 
@@ -194,14 +200,14 @@ export default function Home() {
 
       <section className="catalog" id="catalog">
         <div className="catalog-heading">
-          <div><p className="eyebrow">{mode === "personal" ? "FRESH FROM THE HAUL" : "SINGLE CARD CATALOGUE"}</p><h2>{mode === "personal" ? "Personal Shop" : "MTG Singles"}</h2><p className="muted-copy">{visibleListings.length} {mode === "mtg" ? "cards" : category === "Sold items" ? "sold listings" : "available finds"}</p></div>
+          <div><p className="eyebrow">{mode === "personal" ? "FRESH FROM THE HAUL" : mtgCollection === "sealed" ? "MTG SEALED CATALOGUE" : "SINGLE CARD CATALOGUE"}</p><h2>{mode === "personal" ? "Personal Shop" : mtgCollection === "sealed" ? "MTG Sealed" : "MTG Singles"}</h2><p className="muted-copy">{visibleListings.length} {mode === "mtg" ? mtgCollection === "sealed" ? "sealed products" : "cards" : category === "Sold items" ? "sold listings" : "available finds"}</p></div>
           <label className="sort-field">Sort by<select value={sort} onChange={(event) => setSort(event.target.value)}>
             <option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option>
             <option value="name">Name: A to Z</option>
           </select></label>
         </div>
 
-        {mode === "personal" ? <div className="category-tabs" aria-label="Filter by category">{personalCategories.map((item) => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div> : <><label className="single-search">Search singles<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Card name, set, or condition" /></label><div className="card-filters">
+        {mode === "personal" ? <><label className="product-search">Search products<input id="product-search-input" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search K-pop albums, artists, clothes…" /></label><div className="category-tabs" aria-label="Filter by category">{personalCategories.map((item) => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div></> : <><label className="single-search">Search singles<input id="single-search-input" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Card name, set, or condition" /></label><div className="card-filters">
           <label>Set<select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}><option value="all">All sets</option>{sets.map((setName) => <option key={setName} value={setName}>{setName}</option>)}</select></label>
           <label>Condition<select value={conditionFilter} onChange={(event) => setConditionFilter(event.target.value)}><option value="all">Any condition</option>{conditions.map((condition) => <option key={condition}>{condition}</option>)}</select></label>
           <label>Finish<select value={finishFilter} onChange={(event) => setFinishFilter(event.target.value)}><option value="all">Foil & non-foil</option><option value="foil">Foil</option><option value="nonfoil">Non-foil</option></select></label>

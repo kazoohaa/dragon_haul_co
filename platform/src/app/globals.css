@@ -57,9 +57,9 @@ a { color: inherit; }
 .category-tabs button:hover { border-color: var(--green); }
 .card-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px 12px; margin: 3px 0 20px; }
 .card-filters label { display: grid; gap: 5px; color: var(--muted); font: 9px var(--mono); text-transform: uppercase; }
-.single-search { display: grid; gap: 5px; width: 100%; margin: 3px 0 14px; color: var(--muted); font: 11px var(--mono); text-transform: uppercase; }
-.single-search input { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); background: var(--white); color: var(--ink); font: 15px var(--sans); text-transform: none; }
-.single-search input:focus { outline: 2px solid var(--green-light); border-color: var(--green); }
+.single-search, .product-search { display: grid; gap: 5px; width: 100%; margin: 3px 0 14px; color: var(--muted); font: 11px var(--mono); text-transform: uppercase; }
+.single-search input, .product-search input { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); background: var(--white); color: var(--ink); font: 15px var(--sans); text-transform: none; }
+.single-search input:focus, .product-search input:focus { outline: 2px solid var(--green-light); border-color: var(--green); }
 .price-note { grid-column: 1 / -1; margin: 0; color: var(--muted); font: 9px var(--mono); }
 .setup-notice { margin: 0 0 16px; padding: 11px 13px; border-left: 3px solid var(--yellow); background: #fbf3d7; color: #574b25; font-size: 11px; }
 .personal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 27px 15px; }
@@ -476,6 +476,44 @@ a { color: inherit; }
 }
 .personal-card-foot .listing-actions button:hover { color: var(--white); background: #193c2b; }
 .personal-card-foot .listing-actions button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Reference-style retail header: no hamburger menu. */
+.announcement, .topbar {
+  width: 100vw;
+  margin-right: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw);
+}
+.announcement { display: block; }
+.topbar {
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  min-height: 84px;
+  padding: 0 5vw;
+  gap: 32px;
+  background: var(--white);
+  backdrop-filter: none;
+}
+.quick-nav { gap: clamp(22px, 2.8vw, 44px); }
+.top-actions { justify-self: end; gap: 12px; }
+.utility-button, .bag-button {
+  position: relative;
+  display: grid;
+  width: 40px;
+  height: 50px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.utility-button svg, .bag-button svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
+.utility-button:hover, .bag-button:hover { color: var(--orange); }
+.utility-button:focus-visible, .bag-button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.bag-button span { position: absolute; right: -4px; top: 5px; display: grid; min-width: 15px; height: 15px; padding: 0 2px; place-items: center; border-radius: 50%; background: var(--green); color: var(--white); font: 500 8px/1 var(--mono); }
+
+@media (max-width: 900px) {
+  .topbar { grid-template-columns: 1fr auto; }
+}
 
 @media (max-width: 620px) {
   .personal-card-head { padding-top: 10px; }

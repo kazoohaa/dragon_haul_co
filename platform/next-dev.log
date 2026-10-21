@@ -299,3 +299,83 @@ Creating turbopack project {
 ✓ Compiled in 278ms
 ✓ Compiled in 119ms
 ✓ Compiled in 301ms
+ GET /admin 200 in 119ms (next.js: 6ms, application-code: 113ms)
+ GET /api/admin/session 401 in 27ms (next.js: 5ms, application-code: 21ms)
+ GET /api/admin/session 401 in 27ms (next.js: 5ms, application-code: 21ms)
+ GET / 200 in 81ms (next.js: 14ms, application-code: 67ms)
+ GET /api/products 200 in 1180ms (next.js: 8ms, application-code: 1171ms)
+ GET /api/products 200 in 1191ms (next.js: 3ms, application-code: 1188ms)
+✓ Compiled in 240ms
+✓ Compiled in 194ms
+✓ Compiled in 779ms
+ GET / 200 in 284ms (next.js: 68ms, application-code: 216ms)
+ GET /api/products 200 in 2.1s (next.js: 14ms, application-code: 2.1s)
+ GET /api/products 200 in 2.0s (next.js: 6ms, application-code: 1998ms)
+✓ Compiled in 231ms
+ GET / 200 in 112ms (next.js: 6ms, application-code: 105ms)
+ GET /api/products 200 in 567ms (next.js: 6ms, application-code: 561ms)
+ GET /api/products 200 in 733ms (next.js: 4ms, application-code: 728ms)
+ GET / 200 in 105ms (next.js: 6ms, application-code: 98ms)
+ GET /api/products 200 in 1653ms (next.js: 5ms, application-code: 1649ms)
+ GET /api/products 200 in 1675ms (next.js: 4ms, application-code: 1671ms)
+ GET / 200 in 118ms (next.js: 5ms, application-code: 113ms)
+ GET /api/products 200 in 520ms (next.js: 5ms, application-code: 515ms)
+ GET /api/products 200 in 594ms (next.js: 9ms, application-code: 586ms)
+ GET / 200 in 48ms (next.js: 2ms, application-code: 45ms)
+✓ Compiled in 156ms
+ GET /api/products 200 in 1161ms (next.js: 3ms, application-code: 1158ms)
+ GET /api/products 200 in 1202ms (next.js: 3ms, application-code: 1200ms)
+ GET / 200 in 150ms (next.js: 67ms, application-code: 83ms)
+ GET /api/products 200 in 655ms (next.js: 2ms, application-code: 653ms)
+ GET /api/products 200 in 652ms (next.js: 1.9ms, application-code: 650ms)
+ GET / 200 in 21ms (next.js: 0.9ms, application-code: 21ms)
+ GET / 200 in 37ms (next.js: 1.4ms, application-code: 36ms)
+ GET /api/products 200 in 653ms (next.js: 2ms, application-code: 651ms)
+ GET /api/products 200 in 832ms (next.js: 3ms, application-code: 830ms)
+ GET /products/skz-oddinary-album 200 in 74ms (next.js: 3ms, generate-params: 14ms, application-code: 57ms)
+ GET /api/products 200 in 361ms (next.js: 2ms, application-code: 359ms)
+ GET /api/products 200 in 493ms (next.js: 2ms, application-code: 490ms)
+ GET /api/products 200 in 262ms (next.js: 1.9ms, application-code: 260ms)
+ GET /api/products 200 in 302ms (next.js: 2ms, application-code: 300ms)
+✓ Compiled in 46ms
+✓ Compiled in 37ms
+✓ Compiled in 74ms
+✓ Compiled in 78ms
+ GET / 200 in 59ms (next.js: 3ms, application-code: 55ms)
+ GET /api/products 200 in 1070ms (next.js: 2ms, application-code: 1067ms)
+ GET /api/products 200 in 1238ms (next.js: 2ms, application-code: 1236ms)
+✓ Compiled in 77ms
+ GET / 200 in 65ms (next.js: 4ms, application-code: 61ms)
+ GET /api/products 200 in 708ms (next.js: 1.8ms, application-code: 706ms)
+ GET /api/products 200 in 866ms (next.js: 3ms, application-code: 863ms)
+✓ Compiled in 106ms
+ GET / 200 in 75ms (next.js: 6ms, application-code: 69ms)
+ GET /api/products 200 in 734ms (next.js: 3ms, application-code: 731ms)
+ GET /api/products 200 in 809ms (next.js: 9ms, application-code: 799ms)
+ GET / 404 in 1183ms (next.js: 965ms, application-code: 218ms)
+ GET / 200 in 357ms (next.js: 15ms, application-code: 341ms)
+ GET / 200 in 213ms (next.js: 5ms, application-code: 208ms)
+ GET /api/products 200 in 467ms (next.js: 8ms, application-code: 459ms)
+ GET /api/products 200 in 443ms (next.js: 8ms, application-code: 435ms)
+ GET /admin 200 in 94ms (next.js: 2ms, application-code: 92ms)
+ GET /api/admin/session 401 in 47ms (next.js: 3ms, application-code: 44ms)
+ GET /api/admin/session 401 in 12ms (next.js: 4ms, application-code: 7ms)
+ GET / 200 in 54ms (next.js: 1.5ms, application-code: 53ms)
+ GET /api/products 200 in 529ms (next.js: 3ms, application-code: 526ms)
+ GET /api/products 200 in 797ms (next.js: 3ms, application-code: 794ms)
+✓ Compiled in 54ms
+✓ Compiled in 111ms
+✓ Compiled in 59ms
+✓ Compiled in 98ms
+ GET /admin 200 in 37ms (next.js: 2ms, application-code: 35ms)
+ GET /api/admin/session 401 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/admin/session 401 in 12ms (next.js: 2ms, application-code: 9ms)
+ GET / 200 in 40ms (next.js: 2ms, application-code: 37ms)
+ GET /api/products 200 in 1161ms (next.js: 3ms, application-code: 1157ms)
+ GET / 200 in 36ms (next.js: 1.3ms, application-code: 35ms)
+ GET /api/products 200 in 488ms (next.js: 2ms, application-code: 486ms)
+ GET /api/products 200 in 668ms (next.js: 2ms, application-code: 666ms)
+✓ Compiled in 189ms
+ GET /api/products 200 in 676ms (next.js: 1.4ms, application-code: 674ms)
+ GET /api/products 200 in 877ms (next.js: 2ms, application-code: 874ms)
+✓ Compiled in 63ms

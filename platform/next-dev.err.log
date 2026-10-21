@@ -146,3 +146,53 @@ https://react.dev/link/hydration-mismatch
   172 |         </div>
   173 |       </header>
   174 |
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Uncaught Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary name="/" loading={null}>
+        <HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}>
+          <HTTPAccessFallbackErrorBoundary pathname="/" notFound={{...}} forbidden={undefined} unauthorized={undefined} ...>
+            <RedirectBoundary>
+              <RedirectErrorBoundary router={{...}}>
+                <InnerLayoutRouter url="/" tree={[...]} params={{}} renderTree={{...}} segmentPath={[...]} ...>
+                  <SegmentViewNode type="page" pagePath="page.tsx">
+                    <SegmentTrieNode>
+                    <ClientPageRoot Component={function Home} serverProvidedParams={null}>
+                      <Home params={Promise} searchParams={Promise}>
+                        <main className="shop-shell">
+                          <div>
+                          <header className="topbar">
+                            <a>
+                            <nav className="quick-nav" aria-label="Shop navig...">
+                              <button type="button" onClick={function onClick}>
++                               Personal shop
+-                               All finds
+                              ...
+                            ...
+                          ...
+                  ...
+                ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at button (<anonymous>)
+    at Home (src/app/page.tsx:165:11)
+  163 |         <a className="wordmark" href="#top">dragon haul<span>.</span></a>
+  164 |         <nav className="quick-nav" aria-label="Shop navigation">
+> 165 |           <button type="button" onClick={() => { changeMode("personal"); setCategory("Everything"); }}>All finds</button>
+      |           ^
+  166 |           <button type="button" onClick={() => { changeMode("personal"); setCategory("K-pop"); }}>K-pop</button>
+  167 |           <button type="button" onClick={() => { changeMode("personal"); setCategory("Clothes"); }}>Clothes</button>
+  168 |           <button type="button" onClick={() => { changeMode("personal"); setCategory("Accessories"); }}>Accessories</button>
